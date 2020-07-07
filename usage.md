@@ -2,7 +2,7 @@
 ##### Make sure you have installed the requirements.txt via pip or easy_install on your path with Python version 3.6+
 
 * Adhoc commands can be used like-
-```shell script
+```bash
 ansible -i k8s.py workers_all -m shell -a "sysctl -w net.core.somaxconn=1024" 
 ```
 
