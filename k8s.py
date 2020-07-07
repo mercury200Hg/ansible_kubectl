@@ -35,6 +35,9 @@ class Node:
 
 
 class Grouping:
+    """
+        --- Implements all major functionality of grouping required for dynamic inventory ---
+    """
 
     def __init__(self, worker_nodes: List[Node]):
         self.worker_nodes = worker_nodes
@@ -112,6 +115,9 @@ class Grouping:
 
 
 class K8sUtils:
+    """
+        --- Utils functions for kubernetes lies here ---
+    """
 
     def __init__(self):
         self.v1 = None
