@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import sys
+import re
 from pathlib import Path
 from typing import Dict, Any, List, NoReturn
 
@@ -47,7 +48,9 @@ class Grouping:
         result = {}
         for node in self.worker_nodes:
             for k, v in node.node_labels.items():
-                group = f'{k}_{v}'
+                k = re.sub("\*|\/|\\|!|@|#|\$|%|\^|&|\.", "_", k)
+                v = re.sub("\*|\/|\\|!|@|#|\$|%|\^|&|\.", "_", v)
+                group = f'label_{k}_{v}'
                 if group not in result:
                     result[group] = []
                 if node.node_ip not in result[group]:
@@ -63,7 +66,9 @@ class Grouping:
         result = {}
         for node in self.worker_nodes:
             for k, v in node.node_annotations.items():
-                group = f'{k}_{v}'
+                k = re.sub("\*|\/|\\|!|@|#|\$|%|\^|&|\.", "_", k)
+                v = re.sub("\*|\/|\\|!|@|#|\$|%|\^|&|\.", "_", v)
+                group = f'annotation_{k}_{v}'
                 if group not in result:
                     result[group] = []
                 if node.node_ip not in result[group]:
@@ -78,8 +83,9 @@ class Grouping:
         """
         result = {}
         for node in self.worker_nodes:
-            if node.node_name not in result:
-                result[node.node_name] = [node.node_ip]
+            group = f'name_{node.node_name}'
+            group = re.sub("\*|\/|\\|!|@|#|\$|%|\^|&|\.", "_", group)
+            result[group] = [node.node_ip]
         return result
 
     def group_all(self) -> Dict[str, List[str]]:
@@ -87,9 +93,9 @@ class Grouping:
         Groups the inventory by nothing and returns single group with IP's of all nodes
         :return: dict
         """
-        result = {'workers_all': []}
+        result = {'all_workers': []}
         for node in self.worker_nodes:
-            result['workers_all'].append(node.node_ip)
+            result['all_workers'].append(node.node_ip)
         return result
 
     @staticmethod
